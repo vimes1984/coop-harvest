@@ -8,9 +8,7 @@
 [![Platform: Web, Desktop, Mobile](https://img.shields.io/badge/Platforms-Web_|_Desktop_|_Mobile-blue.svg)](#cross-platform-packaging)
 [![Localization: Ireland Pilot](https://img.shields.io/badge/Localization-Ireland_Pilot-orange.svg)](#regional-localization)
 
-The **Growers' Collective** is an open-source, democratically governed, and cooperatively owned digital platform. It functions as a **Networked Community Supported Agriculture (CSA)** enabler and food sovereignty activist tool, bypassing supermarket oligopolies to connect local, organic growers directly with consumer-members.
-
-By securing direct trade channels and scaling CSA harvest-sharing principles, this platform ensures that **82% of every Euro spent** goes directly to Irish family farms, with the remaining fraction distributed transparently to community logistics and software maintenance.
+The **Growers' Collective** is an open-source, democratically governed, and cooperatively owned digital platform. It is designed to function as a **Networked Community Supported Agriculture (CSA)** enabler and food sovereignty activist tool, bypassing supermarket oligopolies to connect local, organic growers directly with consumer-members.
 
 ---
 
@@ -55,10 +53,10 @@ To ground the pilot phase, the platform is configured with coordinates and data 
 
 ---
 
-## 💰 The Pricing Charter
-Unlike supermarkets, our pricing structure is 100% transparent:
-* **Farmer Share (82%)**: Transferred directly to the farm.
-* **Coop Logistics (13%)**: Used to maintain community delivery vans, cold storage units, and regional distribution routes.
+## 💰 Proposed Pricing Charter
+The cooperative models a transparent target pricing structure for future live operations:
+* **Farmer Share (82%)**: Target direct transfer to the farm.
+* **Coop Logistics (13%)**: Projected for maintaining community delivery vans, cold storage units, and regional distribution routes.
 * **Coop Admin (5%)**: Dedicated to payment gateway processing fees and software maintenance.
 
 ---

@@ -746,7 +746,7 @@ export default function App() {
                 <span className="hero-tagline">Food Sovereignty & Networked CSA</span>
                 <h1 style={{ fontSize: '32px' }}>Direct farmer-to-consumer trade, bypassing corporate supermarkets.</h1>
                 <p style={{ margin: '12px 0 24px 0' }}>
-                  We scale the values of Community Supported Agriculture (CSA). By co-investing in local organic harvests, consumer-members share the risks and bounty directly with Irish growers. Under our charter, **82% of every Euro spent** goes straight to family farms.
+                  We model the values of Community Supported Agriculture (CSA). By co-investing in local organic harvests, consumer-members are designed to share the risks and bounty directly with Irish growers. Under our target charter, **82% of every Euro spent** is modeled to go straight to family farms.
                 </p>
                 <div className="hero-stats" style={{ display: 'flex', gap: '32px' }}>
                   <div className="hero-stat">

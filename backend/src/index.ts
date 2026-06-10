@@ -1,3 +1,8 @@
+import crypto from 'crypto';
+if (typeof global.crypto === 'undefined') {
+  Object.defineProperty(global, 'crypto', { value: crypto.webcrypto });
+}
+
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -305,7 +310,7 @@ mongoose.connect(MONGO_URI)
     });
   })
   .catch((err) => {
-    console.error('Failed to connect to MongoDB. Starting Express server with local mock data routing...');
+    console.error('Failed to connect to MongoDB. Error details:', err);
     
     // Server fallback logic when MongoDB is not running (enables local testing easily)
     app.listen(PORT, () => {

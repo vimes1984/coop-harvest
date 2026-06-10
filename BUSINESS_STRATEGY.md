@@ -10,7 +10,7 @@ The **Growers' Collective** is a decentralized, cooperatively owned platform des
 
 Our core business thesis is simple: **Direct trade maximizes farmgate returns while keeping organic food accessible.** 
 
-Supermarkets in Ireland capture up to 85% of the retail price of fresh produce. Under the Growers' Collective Charter, **82% of every Euro spent goes directly to the Irish family farm.** The remaining 18% is split between logistics (13%) and system administration (5%).
+Supermarkets in Ireland capture up to 85% of the retail price of fresh produce. Under the proposed Growers' Collective Charter, the target model allocates **82% of every Euro spent directly to the Irish family farm.** The remaining 18% is projected to be split between logistics (13%) and system administration (5%).
 
 ---
 
@@ -48,7 +48,7 @@ The platform scales the principles of **Community Supported Agriculture (CSA)**.
 ### For Farmers (Growers / Custodians of the Land)
 * **Guaranteed CSA Revenue**: Secure upfront commitments from local consumer-members to insulate against crop losses.
 * **Zero Aesthetic Rejection**: Sell crop variations (e.g., mismatched carrot sizes) in "Collective Variety Crates".
-* **Soil Stewardship Funding**: 13% logistics and 5% admin fees are capped to ensure 82% goes directly to support farm regenerative practices.
+* **Soil Stewardship Funding**: 13% logistics and 5% admin fees are modeled to be capped so that 82% goes directly to support farm regenerative practices.
 * **Democratic Ownership**: Hold equal equity and voting rights in the cooperative's governance.
 
 ---
@@ -97,12 +97,12 @@ We partner with local GAA (Gaelic Athletic Association) clubs, community halls, 
 
 ---
 
-## 6. Financial Model & Pricing Charter
+## 6. Proposed Financial Model & Target Pricing Charter
 
-### Budget Splits (Out of €1.00 Spend)
-1. **Farm Revenue (€0.82)**: Covers seed propagation, soil regeneration, and direct agricultural labor.
-2. **Logistics Reserve (€0.13)**: Covers electric van leases, commercial depot rent in Dublin, packaging crate replacement, and GAA club dividends.
-3. **Administration Reserve (€0.05)**: Covers Stripe/payment gateway fees (approx 1.9% + 30c), app hosting, and software support.
+### Target Budget Splits (Out of €1.00 Spend)
+1. **Farm Revenue (€0.82)**: Projected to cover seed propagation, soil regeneration, and direct agricultural labor.
+2. **Logistics Reserve (€0.13)**: Proposed to cover electric van leases, commercial depot rent in Dublin, packaging crate replacement, and GAA club dividends.
+3. **Administration Reserve (€0.05)**: Proposed to cover Stripe/payment gateway fees (approx 1.9% + 30c), app hosting, and software support.
 
 ---
 
