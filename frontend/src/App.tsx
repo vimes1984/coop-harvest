@@ -743,10 +743,10 @@ export default function App() {
             {/* Hero Image Section */}
             <section className="marketplace-hero glass" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px', alignItems: 'center' }}>
               <div className="hero-content" style={{ paddingRight: '20px' }}>
-                <span className="hero-tagline">100% Cooperatively Owned Platform</span>
-                <h1 style={{ fontSize: '32px' }}>Fresh organic harvests, delivered direct, bypassing supermarkets.</h1>
+                <span className="hero-tagline">Food Sovereignty & Networked CSA</span>
+                <h1 style={{ fontSize: '32px' }}>Direct farmer-to-consumer trade, bypassing corporate supermarkets.</h1>
                 <p style={{ margin: '12px 0 24px 0' }}>
-                  Every purchase supports the farmer directly. Under our cooperative charter, <strong>82% of retail price</strong> goes straight to the grower, with remaining funds transparently allocated to community logistics and administrative support.
+                  We scale the values of Community Supported Agriculture (CSA). By co-investing in local organic harvests, consumer-members share the risks and bounty directly with Irish growers. Under our charter, **82% of every Euro spent** goes straight to family farms.
                 </p>
                 <div className="hero-stats" style={{ display: 'flex', gap: '32px' }}>
                   <div className="hero-stat">

@@ -8,9 +8,9 @@
 [![Platform: Web, Desktop, Mobile](https://img.shields.io/badge/Platforms-Web_|_Desktop_|_Mobile-blue.svg)](#cross-platform-packaging)
 [![Localization: Ireland Pilot](https://img.shields.io/badge/Localization-Ireland_Pilot-orange.svg)](#regional-localization)
 
-The **Growers' Collective** is an open-source, democratically governed, and cooperatively owned digital marketplace. It enables local, organic farmers to sell fresh crops directly to consumers, bypassing traditional supermarket middle-men. 
+The **Growers' Collective** is an open-source, democratically governed, and cooperatively owned digital platform. It functions as a **Networked Community Supported Agriculture (CSA)** enabler and food sovereignty activist tool, bypassing supermarket oligopolies to connect local, organic growers directly with consumer-members.
 
-This platform ensures that **82% of the retail price** goes directly to Irish family farms, with the remaining fraction distributed transparently between cooperative-managed regional logistics and administrative maintenance.
+By securing direct trade channels and scaling CSA harvest-sharing principles, this platform ensures that **82% of every Euro spent** goes directly to Irish family farms, with the remaining fraction distributed transparently to community logistics and software maintenance.
 
 ---
 
