@@ -1,0 +1,42 @@
+const { app, BrowserWindow } = require('electron');
+const path = require('path');
+
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 1280,
+    height: 850,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    },
+    title: "Growers' Collective",
+    icon: path.join(__dirname, 'dist/assets/react-35ef61ed.svg')
+  });
+
+  // Check if we are in development mode
+  const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+
+  if (isDev) {
+    win.loadURL('http://localhost:5173');
+    // Open Developer Tools in Dev mode
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(path.join(__dirname, 'dist/index.html'));
+  }
+}
+
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
