@@ -680,9 +680,14 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Top Banner Status */}
-      <div className={`system-status-bar ${isApiOnline ? 'online' : 'offline'}`}>
-        <div className="status-indicator"></div>
-        <span>{isApiOnline ? 'Connected to MongoDB Cooperatives DB' : 'Offline Mode (Mock Ledger Active)'}</span>
+      <div className={`system-status-bar ${isApiOnline ? 'online' : 'offline'}`} style={{ gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="status-indicator"></div>
+          <span>{isApiOnline ? 'Connected to MongoDB Cooperatives DB' : 'Offline Mode (Mock Ledger Active)'}</span>
+        </div>
+        <div style={{ background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.05em' }}>
+          PROOF OF CONCEPT ONLY (Target: growerscollective.ie)
+        </div>
         <ShieldAlert size={14} className="status-icon" />
       </div>
 

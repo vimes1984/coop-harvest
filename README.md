@@ -1,5 +1,9 @@
 # Growers' Collective: Direct Farm-to-Consumer Cooperative Platform
 
+> [!IMPORTANT]
+> **PROOF OF CONCEPT (PoC) & PROTOTYPE ONLY**  
+> This repository contains the development prototype, local architecture, and Proof of Concept (PoC) for the Growers' Collective platform. It is **NOT** the final production deployment. In a live release, the core web application must be hosted on a dedicated, registered domain URL (e.g., `https://growerscollective.ie`) and linked to production-grade cloud databases and TLS-secured API endpoints.
+
 [![Cooperative charter: 82% to Farmer](https://img.shields.io/badge/Cooperative_Charter-82%25_to_Farmer-2e7d32.svg)](#the-pricing-charter)
 [![Platform: Web, Desktop, Mobile](https://img.shields.io/badge/Platforms-Web_|_Desktop_|_Mobile-blue.svg)](#cross-platform-packaging)
 [![Localization: Ireland Pilot](https://img.shields.io/badge/Localization-Ireland_Pilot-orange.svg)](#regional-localization)

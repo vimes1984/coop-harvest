@@ -1,5 +1,9 @@
 # Growers' Collective: Cooperative Business Strategy & Ireland Launch Plan
 
+> [!IMPORTANT]
+> **PROTOTYPE STRATEGY BLUEPRINT**  
+> This document details the strategic, operational, and financial framework designed for the Growers' Collective prototype. The deployment guidelines and models presented are geared towards validating the Proof of Concept (PoC). Deploying the final application requires provisioning dedicated web domain assets (e.g. `growerscollective.ie`) and cloud hosting contracts.
+
 ## 1. Executive Summary
 
 The **Growers' Collective** is a decentralized, cooperatively owned platform designed to restructure the Irish agricultural supply chain. By eliminating supermarket intermediaries, we establish a direct farmer-to-consumer marketplace. 
