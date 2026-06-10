@@ -7,6 +7,9 @@
 [![Cooperative charter: 82% to Farmer](https://img.shields.io/badge/Cooperative_Charter-82%25_to_Farmer-2e7d32.svg)](#the-pricing-charter)
 [![Platform: Web, Desktop, Mobile](https://img.shields.io/badge/Platforms-Web_|_Desktop_|_Mobile-blue.svg)](#cross-platform-packaging)
 [![Localization: Ireland Pilot](https://img.shields.io/badge/Localization-Ireland_Pilot-orange.svg)](#regional-localization)
+[![Live Demo on GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-success.svg)](https://vimes1984.github.io/coop-harvest/)
+
+**Live Demo (GitHub Pages)**: [vimes1984.github.io/coop-harvest/](https://vimes1984.github.io/coop-harvest/)
 
 The **Growers' Collective** is an open-source, democratically governed, and cooperatively owned digital platform. It is designed to function as a **Networked Community Supported Agriculture (CSA)** enabler and food sovereignty activist tool, bypassing supermarket oligopolies to connect local, organic growers directly with consumer-members.
 
