@@ -28,7 +28,7 @@ gcloud config set project "$PROJECT_ID"
 echo "Enabling Google APIs (Cloud Run, Cloud Build, Artifact Registry)..."
 gcloud services enable run.googleapis.com \
                        cloudbuild.googleapis.com \
-                       artifactregistry.googleapis.com
+                       artifactregistry.googleapis.com || echo "Warning: Could not verify or enable APIs automatically. Proceeding assuming they are already enabled in your Google Cloud Console."
 
 # Create Artifact Registry repository if it doesn't exist
 if ! gcloud artifacts repositories describe "$REPO_NAME" --location="$REGION" &>/dev/null; then
