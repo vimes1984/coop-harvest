@@ -10,6 +10,9 @@
 [![Platform: Web, Desktop, Mobile](https://img.shields.io/badge/Platforms-Web_|_Desktop_|_Mobile-blue.svg)](#cross-platform-packaging)
 [![Localization: Ireland Pilot](https://img.shields.io/badge/Localization-Ireland_Pilot-orange.svg)](#regional-localization)
 [![Live Demo on GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-success.svg)](https://vimes1984.github.io/coop-harvest/)
+[![GitHub Stars](https://img.shields.io/github/stars/vimes1984/coop-harvest.svg?style=social&label=Star)](https://github.com/vimes1984/coop-harvest/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Docker Ready](https://img.shields.io/badge/Docker-Ready-blue.svg?logo=docker&style=flat-square)](docker-compose.yml)
 
 **Live Demo (GitHub Pages)**: [vimes1984.github.io/coop-harvest/](https://vimes1984.github.io/coop-harvest/)
 
