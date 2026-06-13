@@ -5,10 +5,10 @@
 set -euo pipefail
 
 # 1. Configurable Variables (Modify these for your setup)
-PROJECT_ID="YOUR_GCP_PROJECT_ID"
+PROJECT_ID="coop-harvest"
 REGION="europe-west1" # Dublin/Ireland region is europe-west1
 REPO_NAME="growers-collective"
-MONGO_URI="YOUR_MONGODB_ATLAS_CONNECTION_STRING"
+MONGO_URI="mongodb+srv://placeholder_user:placeholder_password@cluster0.mongodb.net/coop-harvest?retryWrites=true&w=majority"
 
 echo "====================================================="
 echo "   Growers' Collective GCP Cloud Run Deployer        "
