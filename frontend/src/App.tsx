@@ -330,6 +330,18 @@ export default function App() {
     };
 
     checkApiAndLoad();
+
+    // Check if redirected back from Stripe / Mock checkout success
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (sessionId) {
+      setCart([]);
+      window.history.replaceState({}, document.title, window.location.pathname);
+      alert('Cooperative purchase successful! Your payment has been processed and splits routed directly to local family farms.');
+      
+      // Reload stats and produce lists to show updated stocks and splits ledger
+      setTimeout(checkApiAndLoad, 1000);
+    }
   }, []);
 
   // Sync state to localStorage in fallback mode
@@ -409,38 +421,37 @@ export default function App() {
     if (cart.length === 0) return;
 
     const total = getCartTotal();
-    const orderData = {
+    const checkoutData = {
       consumerName: 'Consumer Cooperative Member',
       consumerEmail: 'member@cooperative.coop',
-      deliveryAddress: '12 Grange Road, London, UK',
+      deliveryAddress: '12 Grange Road, Dublin, Ireland',
       items: cart.map(item => ({
-        produce: item.produce._id,
-        name: item.produce.name,
-        quantity: item.quantity,
-        priceAtPurchase: item.produce.price
-      })),
-      totalAmount: total
+        produceId: item.produce._id,
+        quantity: item.quantity
+      }))
     };
 
     if (isApiOnline) {
       try {
-        const res = await fetch(`${API_URL}/orders`, {
+        const res = await fetch(`${API_URL}/checkout/create-session`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderData)
+          body: JSON.stringify(checkoutData)
         });
         if (res.ok) {
-          // Reload data
-          const statsRes = await fetch(`${API_URL}/stats`);
-          if (statsRes.ok) setCoopStats(await statsRes.json());
-          const produceRes = await fetch(`${API_URL}/produce`);
-          if (produceRes.ok) setProduceList(await produceRes.json());
-          setCart([]);
+          const data = await res.json();
           setIsCartOpen(false);
-          alert('Cooperative purchase successful! Your organic produce has been ordered direct from the farm.');
+          if (data.url) {
+            window.location.href = data.url;
+          } else {
+            alert('Checkout failed: Session URL not found.');
+          }
+        } else {
+          alert('Checkout failed: Server error.');
         }
       } catch (err) {
-        alert('Checkout error');
+        console.error('Checkout error:', err);
+        alert('Checkout error: Could not reach the server.');
       }
     } else {
       // Local storage mock checkout

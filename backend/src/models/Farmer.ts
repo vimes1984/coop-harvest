@@ -11,6 +11,7 @@ export interface IFarmer extends Document {
   bio: string;
   image: string;
   coopShares: number;
+  stripeAccountId?: string;
   joinedDate: Date;
 }
 
@@ -25,6 +26,7 @@ const FarmerSchema = new Schema<IFarmer>({
   bio: { type: String, required: true },
   image: { type: String, default: '' },
   coopShares: { type: Number, required: true, default: 100 },
+  stripeAccountId: { type: String, default: '' },
   joinedDate: { type: Date, default: Date.now }
 });
 

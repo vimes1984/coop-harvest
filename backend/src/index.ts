@@ -7,6 +7,7 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import Stripe from 'stripe';
 import { Farmer } from './models/Farmer';
 import { Produce } from './models/Produce';
 import { Proposal } from './models/Proposal';
@@ -18,7 +19,83 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/coop-harvest';
 
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
+
 app.use(cors());
+
+// Stripe Webhook needs the raw body to verify signature
+app.post('/api/checkout/webhook', express.raw({ type: 'application/json' }), async (req: Request, res: Response) => {
+  const sig = req.headers['stripe-signature'];
+
+  if (!stripe || !sig || !process.env.STRIPE_WEBHOOK_SECRET) {
+    return res.status(400).send('Webhook configuration error or Stripe not configured');
+  }
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err: any) {
+    console.error('Webhook signature verification failed:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as any;
+    const orderId = session.metadata?.orderId;
+
+    if (orderId) {
+      try {
+        const order = await Order.findById(orderId);
+        if (order && order.status === 'Pending') {
+          order.status = 'Preparing';
+          await order.save();
+
+          for (const item of order.items) {
+            await Produce.findByIdAndUpdate(item.produce, {
+              $inc: { stock: -item.quantity }
+            });
+          }
+
+          const produceList = await Produce.find().populate('farmer');
+          for (const item of order.items) {
+            const prod = produceList.find(p => p._id.toString() === item.produce.toString());
+            if (prod && prod.farmer) {
+              const farmer = prod.farmer as any;
+              const stripeAccountId = farmer.stripeAccountId;
+              
+              if (stripeAccountId && stripeAccountId.startsWith('acct_')) {
+                const itemTotal = item.priceAtPurchase * item.quantity;
+                const farmerAmount = Math.round(itemTotal * prod.pricingBreakdown.farmerShare * 100);
+
+                console.log(`Routing €${(farmerAmount/100).toFixed(2)} to farmer ${farmer.name} (${stripeAccountId})`);
+
+                try {
+                  await stripe.transfers.create({
+                    amount: farmerAmount,
+                    currency: 'eur',
+                    destination: stripeAccountId,
+                    description: `Payout for ${item.quantity}x ${prod.name} (Order: ${orderId})`,
+                    transfer_group: `order_${orderId}`
+                  });
+                } catch (transferErr: any) {
+                  console.error(`Failed to route transfer to farmer ${farmer.name}:`, transferErr.message);
+                }
+              }
+            }
+          }
+          console.log(`Order ${orderId} processed successfully.`);
+        }
+      } catch (dbErr: any) {
+        console.error('Failed to process order in webhook:', dbErr.message);
+        return res.status(500).send('Database error');
+      }
+    }
+  }
+
+  res.json({ received: true });
+});
+
 app.use(express.json());
 
 // Seeding function
@@ -34,6 +111,7 @@ async function seedDatabase() {
           location: { lat: 53.0123, lng: -6.3214, address: 'Wicklow Hills, Ireland' },
           bio: 'Arthur is a third-generation organic vegetable farmer committed to soil health and pesticide-free heirloom crops in the Garden of Ireland.',
           coopShares: 120,
+          stripeAccountId: 'acct_1ArthurGreen123',
           image: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=400&q=80'
         },
         {
@@ -42,6 +120,7 @@ async function seedDatabase() {
           location: { lat: 52.1245, lng: -8.4952, address: 'Golden Vale, Cork, Ireland' },
           bio: 'Clara cares for a small herd of Jersey cows, producing rich organic milk, grass-fed butter, and artisanal cheese in the lush pastures of Cork.',
           coopShares: 150,
+          stripeAccountId: 'acct_1ClaraMeadow456',
           image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=400&q=80'
         },
         {
@@ -50,6 +129,7 @@ async function seedDatabase() {
           location: { lat: 53.2841, lng: -9.0124, address: 'Galway Bay, Ireland' },
           bio: 'John grows ancient stone-ground wheat varieties and bakes slow-fermentation sourdough breads in a wood-fired oven in the West of Ireland.',
           coopShares: 95,
+          stripeAccountId: 'acct_1JohnBaker789',
           image: 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=400&q=80'
         }
       ]);
@@ -297,6 +377,97 @@ app.get('/api/stats', async (req: Request, res: Response) => {
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to compute stats' });
+  }
+});
+
+app.post('/api/checkout/create-session', async (req: Request, res: Response) => {
+  const { consumerName, consumerEmail, deliveryAddress, items } = req.body;
+
+  try {
+    let totalAmount = 0;
+    const orderItems = [];
+    const stripeLineItems = [];
+
+    for (const item of items) {
+      const prod = await Produce.findById(item.produceId).populate('farmer');
+      if (!prod) {
+        return res.status(404).json({ error: `Produce not found: ${item.produceId}` });
+      }
+
+      const price = prod.price;
+      const quantity = item.quantity;
+      const itemTotal = price * quantity;
+      totalAmount += itemTotal;
+
+      orderItems.push({
+        produce: prod._id,
+        name: prod.name,
+        quantity,
+        priceAtPurchase: price
+      });
+
+      stripeLineItems.push({
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: prod.name,
+            description: `From ${(prod.farmer as any).farmName}`,
+            images: prod.image ? [prod.image] : [],
+          },
+          unit_amount: Math.round(price * 100),
+        },
+        quantity,
+      });
+    }
+
+    const newOrder = new Order({
+      consumerName,
+      consumerEmail,
+      deliveryAddress,
+      items: orderItems,
+      totalAmount: Number(totalAmount.toFixed(2)),
+      status: 'Pending'
+    });
+    const savedOrder = await newOrder.save();
+
+    if (!stripe) {
+      console.log('Stripe not configured. Returning mock checkout session.');
+      
+      for (const item of orderItems) {
+        await Produce.findByIdAndUpdate(item.produce, {
+          $inc: { stock: -item.quantity }
+        });
+      }
+      
+      savedOrder.status = 'Preparing';
+      await savedOrder.save();
+
+      return res.status(201).json({
+        id: `mock_session_${Math.random().toString(36).substring(2, 9)}`,
+        url: `http://localhost:5173/checkout-success?session_id=mock_session_${savedOrder._id}`,
+        isMock: true
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: stripeLineItems,
+      mode: 'payment',
+      success_url: `http://localhost:5173/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://localhost:5173/checkout-cancel`,
+      metadata: {
+        orderId: savedOrder._id.toString()
+      }
+    });
+
+    res.status(201).json({
+      id: session.id,
+      url: session.url,
+      isMock: false
+    });
+  } catch (err: any) {
+    console.error('Checkout session creation error:', err);
+    res.status(500).json({ error: 'Failed to initiate checkout', details: err.message });
   }
 });
 
