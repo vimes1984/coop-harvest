@@ -1,33 +1,32 @@
 ---
-name: 🐛 Bug Report
-about: Create a report to help us improve the prototype.
+name: "🐛 Bug Report"
+about: "Report a software defect or layout bug to help us improve Growers' Collective."
 title: "[BUG] "
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
-**Describe the bug**
+**Describe the Bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**Steps to Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '...'
 3. Scroll down to '...'
 4. See error
 
-**Expected behavior**
+**Expected Behavior**
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Environment info:**
- - OS: [e.g. iOS, Android, macOS, Linux, Windows]
- - Platform Mode: [e.g. Web Browser, Native Desktop (Electron), Native Mobile (Capacitor)]
- - Database: [e.g. Local Mock Storage, MongoDB Atlas]
- - Node.js version: [e.g. v16.13.0]
+**Environment Information (please complete the following details):**
+- OS: [e.g. Ubuntu 22.04, macOS Sonoma, Windows 11]
+- Browser: [e.g. Chrome, Firefox, Safari]
+- Version: [e.g. v1.0.0]
+- Execution environment: [e.g. Local npm run dev, Docker Compose, Electron shell, Capacitor simulator]
 
-**Additional context**
-Add any other context about the problem here (e.g., error logs from the browser console or backend terminal).
+**Additional Context**
+Add any other context about the problem here (e.g. console logs or network request payloads).

@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  database:
+    image: mongo:latest
+    container_name: growers-collective-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  # Express REST API Backend
+  backend:
+    build: ./backend
+    container_name: growers-collective-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - MONGO_URI=mongodb://database:27017/coop-harvest
+    depends_on:
+      - database
+    restart: unless-stopped
+
+  # React + Vite Frontend
+  frontend:
+    build: ./frontend
+    container_name: growers-collective-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
