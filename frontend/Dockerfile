@@ -1,18 +1,31 @@
-FROM node:20-alpine
+# Build stage
+FROM node:20-alpine AS builder
 
+ARG VITE_API_URL
 WORKDIR /app
 
 # Copy dependency files
 COPY package*.json ./
 
-# Install dependencies (ignoring native scripts to prevent platform build issues)
+# Install dependencies (ignoring native scripts)
 RUN npm install --ignore-scripts
 
 # Copy application source
 COPY . .
 
-# Expose the Vite dev server port
-EXPOSE 5173
+# Set build-time env variable for Vite compiler
+ENV VITE_API_URL=$VITE_API_URL
 
-# Start Vite server listening on all hosts so it is accessible outside the container
-CMD ["npm", "run", "dev", "--", "--host"]
+# Build the production bundles
+RUN npm run build
+
+# Production server stage (Nginx)
+FROM nginx:alpine
+
+# Copy static assets from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
