@@ -8,7 +8,18 @@ set -euo pipefail
 PROJECT_ID="coop-harvest"
 REGION="europe-west1" # Dublin/Ireland region is europe-west1
 REPO_NAME="growers-collective"
-MONGO_URI="mongodb+srv://placeholder_user:placeholder_password@cluster0.mongodb.net/coop-harvest?retryWrites=true&w=majority"
+# Load MONGO_URI from backend/.env if it exists and MONGO_URI is not already set
+if [ -z "${MONGO_URI:-}" ] && [ -f "backend/.env" ]; then
+    MONGO_URI=$(grep -E "^MONGO_URI=" backend/.env | cut -d'=' -f2- | tr -d '"' | tr -d "'")
+fi
+
+if [ -z "${MONGO_URI:-}" ]; then
+    echo "Error: MONGO_URI is not set." >&2
+    echo "Please set the MONGO_URI environment variable or define it in backend/.env before running this script." >&2
+    echo "Example:" >&2
+    echo "  export MONGO_URI=\"mongodb+srv://<username>:<password>@<cluster>.mongodb.net/coop-harvest?retryWrites=true&w=majority\"" >&2
+    exit 1
+fi
 
 echo "====================================================="
 echo "   Growers' Collective GCP Cloud Run Deployer        "
@@ -42,9 +53,28 @@ fi
 BACKEND_IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/backend:latest"
 FRONTEND_IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/frontend:latest"
 
+wait_for_build() {
+    local build_id="$1"
+    echo "Waiting for build $build_id to complete..."
+    while true; do
+        local status
+        status=$(gcloud builds describe "$build_id" --format="value(status)" 2>/dev/null || echo "PENDING")
+        echo "Build status: $status"
+        if [ "$status" = "SUCCESS" ]; then
+            echo "Build succeeded!"
+            break
+        elif [ "$status" = "FAILURE" ] || [ "$status" = "INTERNAL_ERROR" ] || [ "$status" = "TIMEOUT" ] || [ "$status" = "CANCELLED" ]; then
+            echo "Error: Build failed with status: $status" >&2
+            exit 1
+        fi
+        sleep 10
+    done
+}
+
 # 2. Deploy Backend
 echo "Building backend container image using Cloud Build..."
-gcloud builds submit --tag "$BACKEND_IMAGE" ./backend
+BACKEND_BUILD_ID=$(gcloud builds submit --tag "$BACKEND_IMAGE" --async --format="value(id)" ./backend)
+wait_for_build "$BACKEND_BUILD_ID"
 
 echo "Deploying backend service to Google Cloud Run..."
 gcloud run deploy growers-collective-backend \
@@ -52,7 +82,7 @@ gcloud run deploy growers-collective-backend \
     --region "$REGION" \
     --platform managed \
     --allow-unauthenticated \
-    --set-env-vars="PORT=8080,MONGO_URI=$MONGO_URI" \
+    --set-env-vars="MONGO_URI=$MONGO_URI" \
     --port=8080
 
 # Retrieve backend URL
@@ -61,9 +91,10 @@ echo "✓ Backend successfully deployed to: $BACKEND_URL"
 
 # 3. Deploy Frontend
 echo "Building frontend container image (linking to backend: $BACKEND_URL) using Cloud Build..."
-gcloud builds submit --tag "$FRONTEND_IMAGE" \
-    --build-arg="VITE_API_URL=$BACKEND_URL" \
-    ./frontend
+echo "VITE_API_URL=$BACKEND_URL" > ./frontend/.env
+FRONTEND_BUILD_ID=$(gcloud builds submit --tag "$FRONTEND_IMAGE" --async --format="value(id)" ./frontend)
+wait_for_build "$FRONTEND_BUILD_ID"
+rm -f ./frontend/.env
 
 echo "Deploying frontend service to Google Cloud Run..."
 gcloud run deploy growers-collective-frontend \
@@ -80,3 +111,4 @@ echo "====================================================="
 echo "Frontend URL: $FRONTEND_URL"
 echo "Backend URL:  $BACKEND_URL"
 echo "====================================================="
+
